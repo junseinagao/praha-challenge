@@ -19,6 +19,7 @@ erDiagram
         int customerInfoId
         int taxId
         bool isPaid
+        date orderAt
     }
 
     ORDER-SHEET_ORDER {
@@ -88,6 +89,7 @@ erDiagram
         int customerInfoId
         int taxId
         bool isPaid
+        date orderAt
     }
 
     ORDER-SHEET_ORDER {
