@@ -4,7 +4,8 @@
 
 ```mermaid
 erDiagram
-    ORDER-SHEET }|--|{ ORDER : has-a-lot-of
+    ORDER-SHEET }|--|{ ORDER-SHEET_ORDER : has-many
+    ORDER-SHEET_ORDER }|--|| ORDER : has-the
     ORDER-SHEET ||--|| CUSTOMER-INFO : has-the
     ORDER-SHEET ||--|| TAX-INFO : has-the
     ORDER ||--|| MENU-ITEM : is
@@ -13,9 +14,14 @@ erDiagram
 
     ORDER-SHEET {
         int id
-        int orderId
+        int orderSheetOrderId
         int customerInfoId
         int taxId
+    }
+
+    ORDER-SHEET_ORDER {
+        ind orderSheetId
+        ind orderId
     }
 
     ORDER {
@@ -28,7 +34,7 @@ erDiagram
     MENU-ITEM {
         int id
         string name
-        int menuTypeId
+        int priceTypeId
         int menuCategoryId
     }
 
