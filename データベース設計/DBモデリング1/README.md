@@ -99,7 +99,6 @@ erDiagram
 
     ORDER {
         int id
-        int menuItemId
         int count
         bool isExcludeWasabi
     }
@@ -111,7 +110,6 @@ erDiagram
 
     MENU-ITEM {
         int id
-        int menuItemId
         id menuNameId
         int priceTypeId
         int menuCategoryId
