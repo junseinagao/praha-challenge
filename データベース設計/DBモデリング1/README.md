@@ -63,6 +63,10 @@ erDiagram
     }
 ```
 
+### 仕様要件
+
+https://github.com/praha-inc/praha-challenge-templates/blob/master/db/design/sushi.png
+
 ### 物理モデルと論理モデルについて
 
 (後述)
