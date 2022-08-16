@@ -8,58 +8,67 @@
 erDiagram
     ORDER-SHEET ||--|{ ORDER-SHEET_ORDER : has-many
     ORDER-SHEET_ORDER }|--|| ORDER : has-the
+    ORDER-SHEET ||..|| RECEIPT : has-the
     ORDER-SHEET }|--|| CUSTOMER-INFO : has-the
-    ORDER-SHEET }|--|| TAX-INFO : has-the
     ORDER ||--|| MENU-ITEM : is
     MENU-ITEM ||--|| MENU-CATEGORY : is
     MENU-ITEM ||--|| PRICE-TYPE : is
 
     ORDER-SHEET {
-        int id
-        int customerInfoId
-        int taxId
-        bool isPaid
-        date orderAt
+        bigint orderSheetId PK "オーダーシートID"
+        bigint customerInfoId FK "カスタマーインフォID"
+        bigint reciptId FK "レシートID"
+        boolean isPaid "支払い済み/未支払い"
+        timestamp orderAt "注文日時"
+    }
+
+    RECEIPT {
+        bigint reciptId PK "レシートID"
+        int totalPriceWithTax "支払総額"
+        int totalPriceWithoutTax "内小計"
+        int totalTax "内税額"
+        timestamp paidAt "決済日時"
     }
 
     ORDER-SHEET_ORDER {
-        ind orderSheetId
-        ind orderId
+        bigint orderSheetId FK "オーダーシートID"
+        bigint orderId FK "オーダーID"
     }
 
     ORDER {
-        int id
-        int menuItemId
-        int count
-        bool isExcludeWasabi
+        bigint orderId PK "オーダーID"
+        bigint menuItemId FK "メニューアイテムID"
+        int plateCount "皿数"
+        boolean isExcludeWasabi "わさび抜き/わさび入り"
     }
 
     MENU-ITEM {
-        int id
-        string name
-        int priceTypeId
-        int menuCategoryId
+        bigint menuItemId PK "メニューアイテムID"
+        string menuItemName PK "メニュー名"
+        bigint priceTypeId FK "プライスタイプID"
+        bigint menuCategoryId FK "メニューカテゴリーID"
     }
 
     PRICE-TYPE {
-        int id
-        int price
+        bigint priceTypeId PK "プライスタイプID"
+        bigint itemPrice PK "価格"
     }
 
     MENU-CATEGORY {
-        int id
-        string name
+        bigint menuCategoryId PK "メニューカテゴリーID"
+        string menuCategoryName PK "カテゴリー名"
     }
 
     CUSTOMER-INFO {
-        int id
-        string name
-        string phoneNumber
+        bigint customerInfoId PK "カスタマーインフォID"
+        varchar64 customerName PK "顧客名"
+        varchar11 phoneNumber PK "電話番号"
     }
 
-    TAX-INFO {
-        int id
-        float tax
+    MASTER-TAX-INFO {
+        bigint masterTaxInfoId PK "マスタータックスインフォID"
+        float tax PK "税率"
+        date applyAt "変更日"
     }
 ```
 
