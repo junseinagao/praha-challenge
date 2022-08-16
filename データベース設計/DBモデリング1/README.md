@@ -6,7 +6,7 @@
 
 ```mermaid
 erDiagram
-    ORDER-SHEET }|--|{ ORDER-SHEET_ORDER : has-many
+    ORDER-SHEET ||--|{ ORDER-SHEET_ORDER : has-many
     ORDER-SHEET_ORDER }|--|| ORDER : has-the
     ORDER-SHEET }|--|| CUSTOMER-INFO : has-the
     ORDER-SHEET }|--|| TAX-INFO : has-the
@@ -77,13 +77,13 @@ https://github.com/praha-inc/praha-challenge-templates/blob/master/db/design/sus
 
 ```mermaid
 erDiagram
-    ORDER-SHEET }|--|{ ORDER-SHEET_ORDER : has-many
+    ORDER-SHEET ||--|{ ORDER-SHEET_ORDER : has-many
     ORDER-SHEET }|--|| CUSTOMER-INFO : has-the
     ORDER-SHEET }|--|| TAX-INFO : has-the
     ORDER-SHEET_ORDER }|--|| ORDER : has-the
-    ORDER }|--|{ ORDER_MENU-ITEM : has-many
-    ORDER ||--|| SHARI-TYPE : is
-    ORDER_MENU-ITEM }|--|{ MENU-ITEM : has-1-or-many
+    ORDER ||--|{ ORDER_MENU-ITEM : has-many
+    ORDER }|--|| SHARI-TYPE : is
+    ORDER_MENU-ITEM }|--|| MENU-ITEM : has-the
     MENU-ITEM ||--|| MENU-CATEGORY : is
     MENU-ITEM ||--|| PRICE-TYPE : is
     MENU-ITEM ||--|| MENU-NAME: is
