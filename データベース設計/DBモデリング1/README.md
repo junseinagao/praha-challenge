@@ -6,33 +6,19 @@
 
 ```mermaid
 erDiagram
-    ORDER-SHEET ||--|{ ORDER-SHEET_ORDER : has-many
-    ORDER-SHEET_ORDER }|--|| ORDER : has-the
-    ORDER-SHEET ||..|| RECEIPT : has-the
+    ORDER-SHEET ||--|{ ORDER : has-many
     ORDER-SHEET }|--|| CUSTOMER-INFO : has-the
-    ORDER ||--|| MENU-ITEM : is
-    MENU-ITEM ||--|| MENU-CATEGORY : is
-    MENU-ITEM ||--|| PRICE-TYPE : is
+    ORDER }|--|| MENU : has-the
+    MENU }|--|| MENU-CATEGORY : has-the
 
     ORDER-SHEET {
         bigint orderSheetId PK "オーダーシートID"
         bigint customerInfoId FK "カスタマーインフォID"
-        bigint reciptId FK "レシートID"
         boolean isPaid "支払い済み/未支払い"
+        int totalPrice "税抜合計額"
+        int totalTax "消費税額"
+        timestamp paidAt "決済日時 (nullable)"
         timestamp orderAt "注文日時"
-    }
-
-    RECEIPT {
-        bigint reciptId PK "レシートID"
-        int totalPriceWithTax "支払総額"
-        int totalPriceWithoutTax "内小計"
-        int totalTax "内税額"
-        timestamp paidAt "決済日時"
-    }
-
-    ORDER-SHEET_ORDER {
-        bigint orderSheetId FK "オーダーシートID"
-        bigint orderId FK "オーダーID"
     }
 
     ORDER {
@@ -42,32 +28,28 @@ erDiagram
         boolean isExcludeWasabi "わさび抜き/わさび入り"
     }
 
-    MENU-ITEM {
+    MENU {
         bigint menuItemId PK "メニューアイテムID"
-        string menuItemName PK "メニュー名"
         bigint priceTypeId FK "プライスタイプID"
         bigint menuCategoryId FK "メニューカテゴリーID"
-    }
-
-    PRICE-TYPE {
-        bigint priceTypeId PK "プライスタイプID"
-        bigint itemPrice PK "価格"
+        varchar64 menuName "メニュー名"
+        int menuPrice "税抜価格"
     }
 
     MENU-CATEGORY {
         bigint menuCategoryId PK "メニューカテゴリーID"
-        string menuCategoryName PK "カテゴリー名"
+        varchar64 menuCategoryName "カテゴリー名"
     }
 
     CUSTOMER-INFO {
         bigint customerInfoId PK "カスタマーインフォID"
-        varchar64 customerName PK "顧客名"
-        varchar11 phoneNumber PK "電話番号"
+        varchar64 customerName "顧客名"
+        varchar11 phoneNumber "電話番号"
     }
 
     MASTER-TAX-INFO {
         bigint masterTaxInfoId PK "マスタータックスインフォID"
-        float tax PK "税率"
+        float taxRate "税率"
         date applyAt "変更日"
     }
 ```
@@ -118,78 +100,67 @@ https://github.com/praha-inc/praha-challenge-templates/blob/master/db/design/sus
 
 ```mermaid
 erDiagram
-    ORDER-SHEET ||--|{ ORDER-SHEET_ORDER : has-many
+    ORDER-SHEET ||--|{ ORDER : has-many
     ORDER-SHEET }|--|| CUSTOMER-INFO : has-the
-    ORDER-SHEET }|--|| TAX-INFO : has-the
-    ORDER-SHEET_ORDER }|--|| ORDER : has-the
-    ORDER ||--|{ ORDER_MENU-ITEM : has-many
-    ORDER }|--|| SHARI-TYPE : is
-    ORDER_MENU-ITEM }|--|| MENU-ITEM : has-the
-    MENU-ITEM ||--|| MENU-CATEGORY : is
-    MENU-ITEM ||--|| PRICE-TYPE : is
-    MENU-ITEM ||--|| MENU-NAME: is
 
     ORDER-SHEET {
-        int id
-        int customerInfoId
-        int taxId
-        bool isPaid
-        date orderAt
-    }
-
-    ORDER-SHEET_ORDER {
-        ind orderSheetId
-        ind orderId
-    }
-
-    ORDER {
-        int id
-        int count
-        bool isExcludeWasabi
-    }
-
-    ORDER_MENU-ITEM {
-        int orderId
-        int menuItemId
-    }
-
-    MENU-ITEM {
-        int id
-        id menuNameId
-        int priceTypeId
-        int menuCategoryId
-    }
-
-    MENU-NAME {
-        int id
-        string name
-    }
-
-    SHARI-TYPE {
-        int id
-        string name
-    }
-
-    PRICE-TYPE {
-        int id
-        int price
-    }
-
-    MENU-CATEGORY {
-        int id
-        string name
+        bigint orderSheetId PK "オーダーシートID"
+        bigint customerInfoId FK "カスタマーインフォID"
+        boolean isPaid "支払い済み/未支払い"
+        int totalPrice "税抜合計額"
+        int totalTax "消費税額"
+        timestamp paidAt "決済日時 (nullable)"
+        timestamp orderAt "注文日時"
     }
 
     CUSTOMER-INFO {
-        int id
-        string name
-        string phoneNumber
+        bigint customerInfoId PK "カスタマーインフォID"
+        varchar64 customerName "顧客名"
+        varchar11 phoneNumber "電話番号"
     }
 
-    TAX-INFO {
-        int id
-        float tax
+    MASTER-TAX-INFO {
+        bigint masterTaxInfoId PK "マスタータックスインフォID"
+        float taxRate "税率"
+        date applyAt "変更日"
     }
+
+    ORDER }|--|| MENU : has-the
+    MENU }|--|| MENU-CATEGORY : has-the
+    MENU ||--|{ MENU_NETA : has-many
+    MENU_NETA }|--|| NETA : has-the
+
+    ORDER {
+        bigint orderId PK "オーダーID"
+        bigint menuId FK "メニューアイテムID"
+        int plateCount "皿数"
+        boolean isExcludeWasabi "わさび抜き/わさび入り"
+    }
+
+    MENU {
+        bigint menuId PK "メニューアイテムID"
+        bigint priceTypeId FK "プライスタイプID"
+        bigint menuCategoryId FK "メニューカテゴリーID"
+        varchar64 menuName "メニュー名"
+        int menuPrice "税抜価格"
+    }
+
+    MENU-CATEGORY {
+        bigint menuCategoryId PK "メニューカテゴリーID"
+        varchar64 menuCategoryName "カテゴリー名"
+    }
+
+    MENU_NETA {
+        bigint menuId FK "メニューアイテムID"
+        bigint netaId FK "ネタID"
+        int includeNetaCount "メニューに入っているネタの数"
+    }
+
+    NETA {
+        bigint netaId "ネタID"
+        varchar64 netaName "ネタ名"
+    }
+
 ```
 
 ### 仕様変更要件
