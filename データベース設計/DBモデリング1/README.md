@@ -14,7 +14,6 @@ erDiagram
     ORDER-SHEET {
         bigint orderSheetId PK "オーダーシートID"
         bigint customerInfoId FK "カスタマーインフォID"
-        boolean isPaid "支払い済み/未支払い"
         int totalPrice "税抜合計額"
         int totalTax "消費税額"
         timestamp paidAt "決済日時 (nullable)"
@@ -23,14 +22,14 @@ erDiagram
 
     ORDER {
         bigint orderId PK "オーダーID"
-        bigint menuItemId FK "メニューアイテムID"
-        int plateCount "皿数"
+        bigint orderSheetId FK "オーダーシートID"
+        bigint menuId FK "メニューアイテムID"
+        int orderCount "個数"
         boolean isExcludeWasabi "わさび抜き/わさび入り"
     }
 
     MENU {
-        bigint menuItemId PK "メニューアイテムID"
-        bigint priceTypeId FK "プライスタイプID"
+        bigint menuId PK "メニューアイテムID"
         bigint menuCategoryId FK "メニューカテゴリーID"
         varchar64 menuName "メニュー名"
         int menuPrice "税抜価格"
@@ -106,7 +105,6 @@ erDiagram
     ORDER-SHEET {
         bigint orderSheetId PK "オーダーシートID"
         bigint customerInfoId FK "カスタマーインフォID"
-        boolean isPaid "支払い済み/未支払い"
         int totalPrice "税抜合計額"
         int totalTax "消費税額"
         timestamp paidAt "決済日時 (nullable)"
@@ -126,15 +124,23 @@ erDiagram
     }
 
     ORDER }|--|| MENU : has-the
+    ORDER }|--|| MASTER-SHARI-TYPE : has-the
     MENU }|--|| MENU-CATEGORY : has-the
     MENU ||--|{ MENU_NETA : has-many
     MENU_NETA }|--|| NETA : has-the
 
     ORDER {
         bigint orderId PK "オーダーID"
+        bigint orderSheetId FK "オーダーシートID"
         bigint menuId FK "メニューアイテムID"
-        int plateCount "皿数"
+        bigint shariTypeId FK "シャリタイプID"
+        int orderCount "個数"
         boolean isExcludeWasabi "わさび抜き/わさび入り"
+    }
+
+    MASTER-SHARI-TYPE {
+        bigint shariTypeId PK "シャリタイプID"
+        varchar64 shariTypeName "シャリの種類名"
     }
 
     MENU {
