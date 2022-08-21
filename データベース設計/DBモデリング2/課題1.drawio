@@ -1,0 +1,13 @@
+<mxfile host="65bd71144e">
+    <diagram id="4JMh1j9kGLypTYwMPhKb" name="ページ1">
+        <mxGraphModel dx="2723" dy="1840" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1200" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="erDiagram&#10;  User }|..o| ThreadMessage : &quot;may have many&quot;&#10;  User }|..o| Message : &quot;may have many&quot;&#10;  ThreadMessage }|..o| Message : &quot;may have many&quot;&#10;  Channel }|--|{ User : &quot;has many&quot;&#10;  Channel }|--|{ Message : &quot;has many&quot;&#10;  Channel }|--|{ ThreadMessage : &quot;has many&quot;&#10;  Workspace }|--|{ User : &quot;has many&quot;&#10;  Workspace }|--|{ Channel : &quot;has many&quot;" style="shadow=0;dashed=0;align=left;strokeWidth=1;shape=mxgraph.mermaid.abstract.mermaid;labelBackgroundColor=#ffffff;noLabel=1;theme=default;fontFamily=Ricty Diminished Discord;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="40" width="1830" height="1120" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
