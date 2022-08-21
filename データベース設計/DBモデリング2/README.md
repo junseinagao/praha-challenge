@@ -2,7 +2,17 @@
 
 ## 課題 1
 
-![課題1]('./課題1.svg')
+```mermaid
+erDiagram
+  User }|..o| ThreadMessage : "may have many"
+  User }|..o| Message : "may have many"
+  ThreadMessage }|..o| Message : "may have many"
+  Channel }|--|{ User : "has many"
+  Channel }|--|{ Message : "has many"
+  Channel }|--|{ ThreadMessage : "has many"
+  Workspace }|--|{ User : "has many"
+  Workspace }|--|{ Channel : "has many"
+```
 
 ### 仕様
 
