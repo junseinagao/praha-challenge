@@ -179,3 +179,166 @@ erDiagram
 
 - 現場では、ワサビ「ぬき」の欄に ✓ マークに加えて、ワサビ抜きの枚数を数字で書く運用がされていました。それに対応して、ワサビを抜く枚数を指定できるようにしてください。
 - 某人気店「Plate of silver」に対抗して、セットメニューを入れ替えれるようにしたいとシャッチョーがお達ししました。それに対応して、セットメニューのネタを自由に入れ替えた注文を保存できるようにしてください。(ここでは、セットメニューの金額はセットメニューの持つネタの金額の合計とします。また、入れ替える前のネタと入れ替えた後のネタの履歴を保存しておく必要があります。)
+
+### 課題 3-1
+
+> 今後は出前を受け付けるようになりました。どのようにテーブル設計をするべきでしょうか?
+
+```mermaid
+erDiagram
+    ORDER-SHEET ||--|{ ORDER : has-many
+    ORDER-SHEET }|--|| CUSTOMER-INFO : has-the
+
+    ORDER-SHEET {
+        bigint orderSheetId PK "オーダーシートID"
+        bigint customerInfoId FK "カスタマーインフォID"
+        int totalPrice "税抜合計額"
+        int totalTax "消費税額"
+        timestamp paidAt "決済日時 (nullable)"
+        timestamp orderAt "注文日時"
+    }
+
+    CUSTOMER-INFO {
+        bigint customerInfoId PK "カスタマーインフォID"
+        varchar64 customerName "顧客名"
+        varchar11 phoneNumber "電話番号"
+        varchar256 delivalyAddress "配達先住所 (nullable)"
+    }
+
+    MASTER-TAX-INFO {
+        bigint masterTaxInfoId PK "マスタータックスインフォID"
+        float taxRate "税率"
+        date applyAt "変更日"
+    }
+
+    ORDER }|--|| MENU : has-the
+    ORDER }|--|| MASTER-SHARI-TYPE : has-the
+    MENU }|--|| MENU-CATEGORY : has-the
+    MENU ||--|{ MENU_NETA : has-many
+    MENU_NETA }|--|| NETA : has-the
+
+    ORDER {
+        bigint orderId PK "オーダーID"
+        bigint orderSheetId FK "オーダーシートID"
+        bigint menuId FK "メニューアイテムID"
+        bigint shariTypeId FK "シャリタイプID"
+        int orderCount "個数"
+        boolean isExcludeWasabi "わさび抜き/わさび入り"
+    }
+
+    MASTER-SHARI-TYPE {
+        bigint shariTypeId PK "シャリタイプID"
+        varchar64 shariTypeName "シャリの種類名"
+    }
+
+    MENU {
+        bigint menuId PK "メニューアイテムID"
+        bigint priceTypeId FK "プライスタイプID"
+        bigint menuCategoryId FK "メニューカテゴリーID"
+        varchar64 menuName "メニュー名"
+        int menuPrice "税抜価格"
+    }
+
+    MENU-CATEGORY {
+        bigint menuCategoryId PK "メニューカテゴリーID"
+        varchar64 menuCategoryName "カテゴリー名"
+    }
+
+    MENU_NETA {
+        bigint menuId FK "メニューアイテムID"
+        bigint netaId FK "ネタID"
+        int includeNetaCount "メニューに入っているネタの数"
+    }
+
+    NETA {
+        bigint netaId "ネタID"
+        varchar64 netaName "ネタ名"
+    }
+
+```
+
+### 課題 3-2
+
+> 税込価格で表示したい
+> セットメニュー内でも個別の寿司ごとにさび抜きかどうかを選択したい
+
+```mermaid
+erDiagram
+    ORDER-SHEET ||--|{ ORDER : has-many
+    ORDER-SHEET }|--|| CUSTOMER-INFO : has-the
+
+    ORDER-SHEET {
+        bigint orderSheetId PK "オーダーシートID"
+        bigint customerInfoId FK "カスタマーインフォID"
+        int totalPrice "税抜合計額"
+        int totalTax "消費税額"
+        timestamp paidAt "決済日時 (nullable)"
+        timestamp orderAt "注文日時"
+    }
+
+    CUSTOMER-INFO {
+        bigint customerInfoId PK "カスタマーインフォID"
+        varchar64 customerName "顧客名"
+        varchar11 phoneNumber "電話番号"
+    }
+
+    MASTER-TAX-INFO {
+        bigint masterTaxInfoId PK "マスタータックスインフォID"
+        float taxRate "税率"
+        date applyAt "変更日"
+    }
+
+    ORDER }|--|| MENU : has-the
+    ORDER }|--|| MASTER-SHARI-TYPE : has-the
+    MENU }|--|| MENU-CATEGORY : has-the
+    MENU ||--|{ MENU_NETA : has-many
+    MENU_NETA }|--|| NETA : has-the
+
+    ORDER {
+        bigint orderId PK "オーダーID"
+        bigint orderSheetId FK "オーダーシートID"
+        bigint menuId FK "メニューアイテムID"
+        bigint shariTypeId FK "シャリタイプID"
+        int orderCount "個数"
+    }
+
+    ORDER ||..o{ ORDER-OPTION : may-have
+    ORDER-OPTION }|--|| MENU : has-the
+
+    ORDER-OPTION {
+        bigint orderOptionId PK "オーダーオプションID"
+        bigint orderId FK "オーダーID"
+        bigint menuId FK "メニューアイテムID"
+        boolean isExcludeWasabi "わさび抜き"
+    }
+
+    MASTER-SHARI-TYPE {
+        bigint shariTypeId PK "シャリタイプID"
+        varchar64 shariTypeName "シャリの種類名"
+    }
+
+    MENU {
+        bigint menuId PK "メニューアイテムID"
+        bigint priceTypeId FK "プライスタイプID"
+        bigint menuCategoryId FK "メニューカテゴリーID"
+        varchar64 menuName "メニュー名"
+        int menuPrice "税抜価格"
+    }
+
+    MENU-CATEGORY {
+        bigint menuCategoryId PK "メニューカテゴリーID"
+        varchar64 menuCategoryName "カテゴリー名"
+    }
+
+    MENU_NETA {
+        bigint menuId FK "メニューアイテムID"
+        bigint netaId FK "ネタID"
+        int includeNetaCount "メニューに入っているネタの数"
+    }
+
+    NETA {
+        bigint netaId "ネタID"
+        varchar64 netaName "ネタ名"
+    }
+
+```
