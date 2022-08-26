@@ -79,8 +79,6 @@ erDiagram
   Channel }|--|{ ThreadMessage : "has many"
 ```
 
-### 物理モデル
-
 ### 仕様
 
 自分で付け足した仕様は `(add.)` で記載します。
