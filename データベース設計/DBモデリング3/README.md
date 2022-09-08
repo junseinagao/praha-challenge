@@ -142,4 +142,4 @@ Directory_Directory }|--|| Directory : "N:1 (2)"
 
 - Todoist はおそらく `child_order` を親に持たせてる。
 
-![](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/386b66ec-2d80-4479-9c4c-69624c9d65c0/todoist-food-for-thought.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220908%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220908T054123Z&X-Amz-Expires=86400&X-Amz-Signature=afe90d6ff0d01552b53a38e077ae13ab12c2151fba6248e37240ab42dcc9974e&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22todoist-food-for-thought.mp4%22&x-id=GetObject)
+https://s3.us-west-2.amazonaws.com/secure.notion-static.com/386b66ec-2d80-4479-9c4c-69624c9d65c0/todoist-food-for-thought.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220908%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220908T054123Z&X-Amz-Expires=86400&X-Amz-Signature=afe90d6ff0d01552b53a38e077ae13ab12c2151fba6248e37240ab42dcc9974e&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22todoist-food-for-thought.mp4%22&x-id=GetObject
