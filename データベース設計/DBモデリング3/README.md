@@ -20,8 +20,18 @@ Document {
   text created_by "作成ユーザー"
   text updated_by "最終更新ユーザー"
   datetime created_at "作成日"
-  datetime updated_by "最終更新日"
+  datetime updated_at "最終更新日"
 }
+
+DocumentChangedLog {
+  text document_id PK "ドキュメントID ,uuid"
+  text directory_id FK "所属するディレクトリID"
+  text document_content "内容"
+  text updated_by "最終更新ユーザー"
+  datetime updated_at "最終更新日"
+}
+
+DocumentChangedLog }|--|| Document : "N:1"
 
 Document }|--|| Directory : "N:1"
 
@@ -31,7 +41,7 @@ Directory {
   text created_by "作成ユーザー"
   text updated_by "最終更新ユーザー"
   datetime created_at "作成日"
-  datetime updated_by "最終更新日"
+  datetime updated_at "最終更新日"
 }
 
 Directory_Directory {
@@ -90,8 +100,18 @@ Document {
   text prev_document_id FK "前のドキュメントID,nullable"
   text next_document_id FK "次のドキュメントID,nullable"
   datetime created_at "作成日"
-  datetime updated_by "最終更新日"
+  datetime updated_at "最終更新日"
 }
+
+DocumentChangedLog {
+  text document_id PK "ドキュメントID ,uuid"
+  text directory_id FK "所属するディレクトリID"
+  text document_content "内容"
+  text updated_by "最終更新ユーザー"
+  datetime updated_at "最終更新日"
+}
+
+DocumentChangedLog }|--|| Document : "N:1"
 
 Document ||--|| Document : "1:1 (1)"
 Document ||--|| Document : "1:1 (2)"
@@ -104,7 +124,7 @@ Directory {
   text created_by "作成ユーザー"
   text updated_by "最終更新ユーザー"
   datetime created_at "作成日"
-  datetime updated_by "最終更新日"
+  datetime updated_at "最終更新日"
 }
 
 Directory_Directory {
