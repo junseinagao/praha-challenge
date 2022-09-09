@@ -18,15 +18,12 @@ Document {
   text directory_id FK "所属するディレクトリID"
   text document_content "内容"
   text created_by "作成ユーザー"
-  text updated_by "最終更新ユーザー"
   datetime created_at "作成日"
-  datetime updated_at "最終更新日"
 }
 
 DocumentChangedLog {
   text document_id PK "ドキュメントID ,uuid"
   text directory_id FK "所属するディレクトリID"
-  text document_content "内容"
   text updated_by "最終更新ユーザー"
   datetime updated_at "最終更新日"
 }
@@ -72,6 +69,24 @@ Directory_Directory }|--|| Directory : "N:1 (2)"
   - ディレクトリを CRUD できる
     - (add.) ディレクトリが Delete された場合、そのディレクトリに属する全てのドキュメントとディレクトリが削除される
 
+#### ドキュメントの最新の内容を取得する SQL
+
+```sql
+SELECT document_id, document_content FROM Document
+WHERE document_id = %s
+JOIN DocumentChangedLog ON Document.document_id = DocumentChangedLog.document_id
+ORDER BY DocumentChangedLog.updated_at DESC
+LIMIT 1;
+```
+
+`Document` に `updated_at` を持たせる場合のパターン
+
+```sql
+SELECT document_id, document_content FROM Document
+WHERE document_id = %s
+JOIN DocumentChangedLog ON Document.document_id = DocumentChangedLog.document_id AND Document.updated_at = DocumentChangedLog.updated_at;
+```
+
 # 課題 2
 
 ### 仕様要件
@@ -94,13 +109,11 @@ User }|--|| Directory : "N:1"
 Document {
   text document_id PK "ドキュメントID ,uuid"
   text directory_id FK "所属するディレクトリID"
-  text document_content "内容"
-  text created_by "作成ユーザー"
-  text updated_by "最終更新ユーザー"
   text prev_document_id FK "前のドキュメントID,nullable"
   text next_document_id FK "次のドキュメントID,nullable"
+  text created_by "作成ユーザー"
   datetime created_at "作成日"
-  datetime updated_at "最終更新日"
+
 }
 
 DocumentChangedLog {
