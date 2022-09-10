@@ -24,8 +24,7 @@ erDiagram
 
 Reminder {
   text reminder_id PK "リマインダーID,uuid"
-  text workspace_id FK "SlackのワークスペースID"
-  text created_by FK "リマインダーを作成したユーザーのID"
+  text created_by FK "リマインダーを作成したユーザーのメンバーID"
   int  reminder_template_id FK "紐付けられたリマインダーテンプレートタイプID"
   text reminder_template_input "入力されたリマインダーの変数部分"
   text reminder_content "リマインダーの内容"
@@ -48,15 +47,6 @@ RemindTargetUser {
 }
 
 RemindTargetUser }|--|| Reminder : "N:1"
-
-Reminder }|--|| SlackWorkspace : "N:1"
-
-SlackWorkspace {
-  text workspace_id PK "SlackのワークスペースID"
-  datetime created_at "作成日時"
-}
-
-
 ```
 
 ### アプリケーションサイドのフロー
@@ -106,10 +96,6 @@ JOIN remind_target_user ON remind_target_user.reminder_id = reminder.reminder_id
 #### ユーザーによる自己の設定したリマインダーの一覧取得
 
 1. `Reminder` の `created_by` がユーザーの ID であるものを取得する。
-
-#### ワークスペースに slack アプリを追加する
-
-1. `SlackWorkspace` に `workspace_id` を追加する
 
 ### その他検討事項
 
