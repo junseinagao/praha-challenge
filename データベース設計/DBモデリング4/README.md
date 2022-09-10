@@ -26,25 +26,25 @@ Reminder {
   text reminder_id PK "リマインダーID,uuid"
   text workspace_id FK "SlackのワークスペースID"
   text created_by FK "リマインダーを作成したユーザーのID"
-  int  reminder_term_type_id FK "リマインダータームタイプID"
-  int reminder_term "リマインダーを送る周期の数値,nullable"
+  int  reminder_template_id FK "紐付けられたリマインダーテンプレートタイプID"
+  text reminder_template_input "入力されたリマインダーの変数部分"
   text reminder_content "リマインダーの内容"
   detetime next_remind_at "次のリマインド日時,nullable"
   detetime completed_at "完了日時,nullable"
   datetime created_at "作成日時"
 }
 
-ReminderTermType ||--|{ Reminder : "1:N"
+ReminderTemplate ||--|{ Reminder : "1:N"
 
-ReminderTermType {
-  int master_reminder_term_type_id PK "リマインダータームタイプのID"
-  text master_reminder_term_type_template "リマインダータームタイプのテンプレート (例:every %s days)"
-  text master_reminder_term_type_name "リマインダータームタイプの説明"
+ReminderTemplate {
+  int reminder_template_id PK "リマインダーテンプレートのID"
+  text reminder_template_template "リマインダーテンプレートのテンプレート文 (例:every %s days)"
+  text reminder_template_name "リマインダーテンプレートの説明"
 }
 
 RemindTargetUser {
   text reminder_id FK "リマインダーID"
-  text user_id FK "SlackのユーザID"
+  text slack_member_id FK "SlackのメンバーID"
 }
 
 RemindTargetUser }|--|| Reminder : "N:1"
@@ -56,15 +56,6 @@ SlackWorkspace {
   datetime created_at "作成日時"
 }
 
-SlackUser }|--|| Reminder : "N:1"
-SlackUser ||--|{ RemindTargetUser : "1:N"
-
-SlackUser {
-  text user_id PK "SlackのユーザーID"
-  text workspace_id FK "SlackのワークスペースID"
-  text user_name "Slackのユーザー名"
-  datetime created_at "作成日時"
-}
 
 ```
 
@@ -127,49 +118,12 @@ JOIN remind_target_user ON remind_target_user.reminder_id = reminder.reminder_id
 - slack api を繰り返し叩くのは負荷が高いので、`SlackUser` は定期的に取得してきて DB に保存しておく。という方針にした。
 - SlackUser を DB に保存する必要は必要ないため削っても良い。
 
-```mermaid
-erDiagram
-
-Reminder {
-  text reminder_id PK "リマインダーID,uuid"
-  text workspace_id FK "SlackのワークスペースID"
-  text created_by FK "リマインダーを作成したユーザーのID"
-  int  reminder_term_type_id FK "リマインダータームタイプID"
-  int reminder_term "リマインダーを送る周期の数値,nullable"
-  text reminder_content "リマインダーの内容"
-  detetime next_remind_at "次のリマインド日時,nullable"
-  detetime completed_at "完了日時,nullable"
-  datetime created_at "作成日時"
-}
-
-ReminderTermType ||--|{ Reminder : "1:N"
-
-ReminderTermType {
-  int master_reminder_term_type_id PK "リマインダータームタイプのID"
-  text master_reminder_term_type_template "リマインダータームタイプのテンプレート (例:every %s days)"
-  text master_reminder_term_type_name "リマインダータームタイプの説明"
-}
-
-RemindTargetUser {
-  text reminder_id FK "リマインダーID"
-  text slack_user_id FK "SlackのユーザID"
-}
-
-RemindTargetUser }|--|| Reminder : "N:1"
-
-Reminder }|--|| SlackWorkspace : "N:1"
-
-SlackWorkspace {
-  text workspace_id PK "SlackのワークスペースID"
-  datetime created_at "作成日時"
-}
-
-```
-
-- こうした方が`SlackUser`が古くなることについて考慮する必要がない。
+- SlackUser を DB に保存しない方が`SlackUser`が古くなることについて考慮する必要がない。
 - `RemindTargetUser.slack_user_id` と `RemindTargetUser.created_by` で Slack のユーザ ID を使用している。
 - しかし、取得する度に slack api を叩くのはやはりレートリミットに引っかかってしまいそう。
 - また、レスポンスタイムも遅くなる?。要調査。
+- 2020/09/10 slack api の調査をして保存しておく必要なさそうなので削る。
+  - Slack ユーザーのメンバー ID さえ`Reminder`に保存しておけば事足りる。
 
 #### `RemindTargetUser` を正規化する必要はあるのか?このアプリケーション専用の DB なら配列で持ってもいいのでは?
 
